@@ -7,9 +7,7 @@ export default function Index() {
 		<div className="">
 			<Header />
 			<Home />
-			<div className="p-20 container mx-auto">
-				<Input />
-			</div>
+			
 		</div>
 	);
 }
