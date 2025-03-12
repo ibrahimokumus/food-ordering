@@ -4,16 +4,18 @@ import React from "react";
 import MenuWrapper from "../../components/product/MenuWrapper";
 import About from "../../components/About";
 import Reservation from "../../components/Reservation";
+import Customers from "../../components/customers/Customers";
 
 const Index = () => {
 	return (
-		<div className="">
+		<React.Fragment>
 			<Carousel />
 			<Campaingns />
 			<MenuWrapper />
 			<About />
-			<Reservation/>
-		</div>
+			<Reservation />
+			<Customers />
+		</React.Fragment>
 	);
 };
 
