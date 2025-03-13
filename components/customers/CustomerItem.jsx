@@ -3,7 +3,7 @@ import React from "react";
 
 export const CustomerItem = (props) => {
 	return (
-		<div className="mt-5">
+		<div className="mt-5 mx-4">
 			<div className="p-6 bg-secondary text-white rounded-md">
 				<p>
 					Little Red Riding Hood lived in a wood with her mother. One day Little Red Riding Hood went to visit her granny. She had a
