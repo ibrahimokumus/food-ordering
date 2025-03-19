@@ -5,19 +5,21 @@ import Search from "../ui/Search";
 import { GiHamburgerMenu, GiCancel } from "react-icons/gi";
 import { useRouter } from "next/router";
 import Link from "next/link";
+import { useSelector } from "react-redux";
 const Header = () => {
 	const [isSearchModal, setIsSearchModal] = useState(false);
 	const [isMenuModal, setIsMenuModal] = useState(false);
 
 	const router = useRouter();
 
+	const cart = useSelector((state) => state.cart); //state management & reading state with useSelector
 	return (
 		<div className={`h-24 z-50 relative ${router.asPath === "/" ? "bg-transparent" : "bg-secondary"}`}>
 			<div className="container mx-auto text-white flex justify-between items-center h-full">
 				<div>
 					<Logo />
 				</div>
-				{/* buraya tekrar bak video 14 */}
+
 				<nav
 					className={`sm:static absolute top-0 left-0 sm:h-auto sm:w-auto w-full h-screen sm:text-white text-black  sm:bg-transparent bg-white sm:flex hidden ${
 						isMenuModal === true && "!grid place-content-center"
@@ -55,8 +57,11 @@ const Header = () => {
 						</span>
 					</Link>
 					<Link href="/cart">
-						<span>
+						<span className="relative">
 							<FaShoppingCart className="hover:text-primary transition-all" />
+							<span className="absolute w-4 h-4 text-xs grid place-content-center rounded-full bg-primary -top-2 -right-3 text-black font-bold">
+								{cart.products.length === 0 ? 0 : cart.products.length}
+							</span>
 						</span>
 					</Link>
 					<button onClick={() => setIsSearchModal(true)}>

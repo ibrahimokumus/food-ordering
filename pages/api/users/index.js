@@ -6,6 +6,8 @@ const handle = async (req, res) => {
 	if (method === "GET") {
 		try {
 			const users = await User.find();
+			console.log("userss ::s");
+			console.log(users);
 			res.status(200).json(users);
 		} catch (err) {
 			console.log(err);
