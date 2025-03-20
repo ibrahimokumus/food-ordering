@@ -1,8 +1,7 @@
 import Image from "next/image";
 import Title from "../../components/ui/Title";
 import { useDispatch, useSelector } from "react-redux";
-//!reset bak. redux tarafinda
-import { reset } from "../../redux/cartSlice";
+import { resetProduct } from "../../redux/cartSlice";
 const Cart = () => {
 	const cart = useSelector((state) => state.cart);
 	const dispatch = useDispatch();
@@ -70,7 +69,8 @@ const Cart = () => {
 					</div>
 
 					<div>
-						<button className="btn-primary mt-4 md:w-auto w-52" onClick={() => dispatch(reset())}>
+						{/* state sifirlamak icin kullaniliyor. bunu ilerde duzenleyebiliriz*/}
+						<button className="btn-primary mt-4 md:w-auto w-52" onClick={() => dispatch(resetProduct())}>
 							CHECKOUT NOW!
 						</button>
 					</div>
