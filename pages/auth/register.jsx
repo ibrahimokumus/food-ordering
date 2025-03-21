@@ -4,9 +4,16 @@ import { useFormik } from "formik";
 import Title from "../../components/ui/Title";
 import Input from "../../components/form/Input";
 import Link from "next/link";
+import axios from "axios";
 
 const Register = () => {
 	const onSubmit = async (values, actions) => {
+		try {
+			const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/users/register`, values);
+		} catch (error) {
+			console.log(error);
+		}
+
 		console.log("first");
 		await new Promise((resolve) => setTimeout(resolve, 4000));
 		actions.resetForm();
@@ -69,7 +76,9 @@ const Register = () => {
 					))}
 				</div>
 				<div className="flex flex-col w-full gap-y-3 mt-6">
-					<button className="btn-primary">Register</button>
+					<button className="btn-primary" type="submit">
+						Register
+					</button>
 
 					<Link href="/auth/login">
 						<span className="text-sm underline cursor-pointer text-secondary">Do you have an account?</span>

@@ -13,7 +13,7 @@ const handle = async (req, res) => {
 			console.log(err);
 		}
 	}
-	//! tekrar gozden gecir
+
 	if (method === "POST") {
 		try {
 			const newUser = await User.create(req.body);
