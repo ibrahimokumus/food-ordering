@@ -5,12 +5,17 @@ import Title from "../../components/ui/Title";
 import Input from "../../components/form/Input";
 import Link from "next/link";
 import axios from "axios";
-
+import { toast } from "react-toastify";
 const Register = () => {
 	const onSubmit = async (values, actions) => {
 		try {
 			const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/users/register`, values);
+
+			if (response.status === 200) {
+				toast.success("User created");
+			}
 		} catch (error) {
+			toast.error(error.response.data.message);
 			console.log(error);
 		}
 
