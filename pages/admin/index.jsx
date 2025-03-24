@@ -4,12 +4,15 @@ import Input from "../../components/form/Input";
 import { useFormik } from "formik";
 import { adminSchema } from "../../schema/admin";
 import Link from "next/link";
+import axios from "axios";
 
 const Index = () => {
 	const onSubmit = async (values, actions) => {
-		console.log("first");
-		await new Promise((resolve) => setTimeout(resolve, 4000));
-		actions.resetForm();
+		try {
+			const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/admin`);
+			if (response.status === 200) {
+			}
+		} catch (error) {}
 	};
 	const { values, errors, touched, handleSubmit, handleChange, handleBlur } = useFormik({
 		initialValues: {
