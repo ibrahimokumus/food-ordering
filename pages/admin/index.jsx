@@ -5,12 +5,19 @@ import { useFormik } from "formik";
 import { adminSchema } from "../../schema/admin";
 import Link from "next/link";
 import axios from "axios";
+import { toast } from "react-toastify";
+import { useRouter } from "next/router";
 
-const Index = () => {
+const AdminLogin = () => {
+	const { push } = useRouter();
+
 	const onSubmit = async (values, actions) => {
 		try {
-			const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/admin`);
+			const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/admin`, values);
 			if (response.status === 200) {
+				actions.resetForm();
+				toast.success("Login successfull");
+				push("/admin/profile");
 			}
 		} catch (error) {}
 	};
@@ -62,4 +69,17 @@ const Index = () => {
 		</div>
 	);
 };
-export default Index;
+// token varken, direk profile yonlendiriyor
+export const getServerSideProps = (context) => {
+	const myCookie = context.req?.cookies || "";
+	if (myCookie.accessToken === process.env.ADMIN_TOKEN) {
+		return {
+			redirect: {
+				destination: "/admin/profile",
+				permanent: false,
+			},
+		};
+	}
+	return { props: {} };
+};
+export default AdminLogin;

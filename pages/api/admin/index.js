@@ -1,5 +1,5 @@
-import cookie from "cookie";
-//!bug include. refactor here later
+import * as cookie from "cookie";
+
 const handler = (req, res) => {
 	try {
 		const { method } = req;
@@ -19,13 +19,24 @@ const handler = (req, res) => {
 					})
 				);
 
-				res.status(200).json({ message: "Başarılı giriş!", token });
+				res.status(200).json({ message: "Başarılı giriş!" });
 			} else {
 				res.status(401).json({ message: "Geçersiz kullanıcı bilgileri." });
 			}
-		} else {
-			res.setHeader("Allow", ["POST"]);
-			res.status(405).json({ message: "Yalnızca POST isteğine izin verilir." });
+		}
+
+		if (method === "PUT") {
+			const token = process.env.ADMIN_TOKEN;
+
+			res.setHeader(
+				"Set-Cookie",
+				cookie.serialize("accessToken", token, {
+					maxAge: -1,
+					path: "/",
+				})
+			);
+
+			res.status(200).json({ message: "Log out successful" });
 		}
 	} catch (error) {
 		console.error("Hata:", error.message);
