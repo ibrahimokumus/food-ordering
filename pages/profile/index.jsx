@@ -3,9 +3,25 @@ import Image from "next/image";
 import Account from "../../components/profile/Account";
 import Password from "../../components/profile/Password";
 import Order from "../../components/profile/Order";
+import { getSession, signOut, useSession } from "next-auth/react";
+import { useRouter } from "next/router";
 
-const Profile = () => {
+const Profile = ({ session }) => {
 	const [tabs, setTabs] = useState(0);
+	const { push } = useRouter();
+	//const { data: session } = useSession();
+
+	const handleSignOut = () => {
+		if (confirm("Are you sure that you want to sign out?")) {
+			signOut({ redirect: false });
+		}
+	};
+	useEffect(() => {
+		// session yoksa, login yonlendiriyoz
+		if (!session) {
+			push("/auth/login");
+		}
+	}, [session]);
 	return (
 		<div className="flex px-10 min-h-[calc(100vh_-_433px)]">
 			<div className="w-80">
@@ -42,7 +58,7 @@ const Profile = () => {
 						<button className="ml-1">Orders</button>
 					</li>
 					<li
-						onClick={() => setTabs(3)}
+						onClick={handleSignOut}
 						className={`border w-full p-3 cursor-pointer hover:bg-primary hover:text-white transition-all ${
 							tabs === 3 && "bg-primary"
 						}`}
@@ -59,4 +75,18 @@ const Profile = () => {
 	);
 };
 
+export async function getServerSideProbs({ req }) {
+	const session = await getSession({ req });
+	if (!session) {
+		return {
+			redirect: {
+				destination: "/auth/login",
+				permanent: false,
+			},
+		};
+	}
+	return {
+		props: { session },
+	};
+}
 export default Profile;
