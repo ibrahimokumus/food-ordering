@@ -5,8 +5,8 @@ import Password from "../../components/profile/Password";
 import Order from "../../components/profile/Order";
 import { getSession, signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/router";
-
-const Profile = ({ session }) => {
+import axios from "axios";
+const Profile = ({ session, user }) => {
 	const [tabs, setTabs] = useState(0);
 	const { push } = useRouter();
 	//const { data: session } = useSession();
@@ -27,7 +27,7 @@ const Profile = ({ session }) => {
 			<div className="w-80">
 				<div className="relative flex flex-col items-center px-10 py-5 border border-b-0">
 					<Image src="/images/client2.jpg" alt="" width={100} height={100} className="rounded-full" />
-					<b className="text-2xl mt-1">Ibrahim</b>
+					<b className="text-2xl mt-1">{user.fullName}</b>
 				</div>
 				<ul className="text-center font-semibold">
 					<li
@@ -75,7 +75,7 @@ const Profile = ({ session }) => {
 	);
 };
 
-export async function getServerSideProbs({ req }) {
+export async function getServerSideProbs({ req, params }) {
 	const session = await getSession({ req });
 	if (!session) {
 		return {
@@ -85,8 +85,9 @@ export async function getServerSideProbs({ req }) {
 			},
 		};
 	}
+	const user = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/users/${params.id}`);
 	return {
-		props: { session },
+		props: { session, user: user ? user.data : null },
 	};
 }
 export default Profile;
