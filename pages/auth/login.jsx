@@ -4,14 +4,19 @@ import Input from "../../components/form/Input";
 import { useFormik } from "formik";
 import { loginSchema } from "../../schema/login";
 import Link from "next/link";
-import { useSession, signIn } from "next-auth/react";
+import { useSession, signIn, getSession } from "next-auth/react";
+import { useRouter } from "next/router";
 const Login = () => {
 	const { data: session } = useSession();
+	//	const { push } = useRouter();
 	console.log(session);
 	const onSubmit = async (values, actions) => {
 		const { email, password } = values;
 		let options = { redirect: false, email, password };
 		const res = await signIn("credentials", options);
+		actions.resetForm();
+		//* giris bilgisi yanlissa, hata basilabilir burda.
+		//*toastfy ile uyari bas.
 	};
 	const { values, errors, touched, handleSubmit, handleChange, handleBlur } = useFormik({
 		initialValues: {
@@ -41,6 +46,14 @@ const Login = () => {
 			touched: touched.password,
 		},
 	];
+
+	// useEffect(() => {
+	// 	 session varsa, profile yonlendiriyoz
+	// 	if (session) {
+	// 		push("/profile");
+	// 	}
+	// }, [session]);
+
 	return (
 		<div className="container mx-auto">
 			<form className="flex flex-col items-center my-20 md:w-1/2 w-full mx-auto" onSubmit={handleSubmit}>
@@ -66,4 +79,19 @@ const Login = () => {
 		</div>
 	);
 };
+//session varsa direk profile yondirme
+export async function getServerSideProbs({ req }) {
+	const session = await getSession({ req });
+	if (session) {
+		return {
+			redirect: {
+				destination: "/profile",
+				permanent: false,
+			},
+		};
+	}
+	return {
+		props: {},
+	};
+}
 export default Login;
