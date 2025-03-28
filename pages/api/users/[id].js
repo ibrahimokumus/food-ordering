@@ -1,5 +1,6 @@
 import dbConnect from "../../../util/dbConnect";
 import User from "../../../models/User";
+import bcrypt from "bcryptjs";
 const handle = async (req, res) => {
 	await dbConnect();
 	const {
@@ -10,8 +11,24 @@ const handle = async (req, res) => {
 		try {
 			const user = await User.findById(id);
 
-			console.log(users);
+			console.log(user);
 			res.status(200).json(user);
+		} catch (err) {
+			console.log(err);
+		}
+	}
+	if (method === "PUT") {
+		try {
+			if (req.body.password) {
+				req.body.password = await bcrypt.hash(req.body.password, 10);
+				req.body.confirmPassword = await bcrypt.hash(req.body.confirmPassword, 10);
+			}
+			const users = await User.findByIdAndUpdate(id, req.body, {
+				new: true,
+			});
+
+			console.log(users);
+			res.status(200).json(users);
 		} catch (err) {
 			console.log(err);
 		}

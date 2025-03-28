@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Title from "../../components/ui/Title";
 import Input from "../../components/form/Input";
 import { useFormik } from "formik";
@@ -6,15 +6,23 @@ import { loginSchema } from "../../schema/login";
 import Link from "next/link";
 import { useSession, signIn, getSession } from "next-auth/react";
 import { useRouter } from "next/router";
+import axios from "axios";
 const Login = () => {
 	const { data: session } = useSession();
-	//	const { push } = useRouter();
+	const { push } = useRouter();
+	const [currentUser, setCurrentUser] = useState(null);
 	console.log(session);
 	const onSubmit = async (values, actions) => {
 		const { email, password } = values;
 		let options = { redirect: false, email, password };
-		const res = await signIn("credentials", options);
-		actions.resetForm();
+		try {
+			const res = await signIn("credentials", options);
+			actions.resetForm();
+		} catch (error) {
+			console.log(error);
+		}
+
+		//	push("/profile");
 		//* giris bilgisi yanlissa, hata basilabilir burda.
 		//*toastfy ile uyari bas.
 	};
@@ -47,12 +55,20 @@ const Login = () => {
 		},
 	];
 
-	// useEffect(() => {
-	// 	 session varsa, profile yonlendiriyoz
-	// 	if (session) {
-	// 		push("/profile");
-	// 	}
-	// }, [session]);
+	useEffect(() => {
+		// session varsa, profile yonlendiriyoz
+		const getUser = async () => {
+			try {
+				const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/users`);
+				console.log("sonmuc " + res.data?.find((user) => user.email === session?.user?.email));
+				setCurrentUser(res.data?.find((user) => user.email === session?.user?.email));
+				push("/profile/" + currentUser?._id);
+			} catch (error) {
+				console.log(error);
+			}
+		};
+		getUser();
+	}, [session, currentUser]);
 
 	return (
 		<div className="container mx-auto">
@@ -82,10 +98,12 @@ const Login = () => {
 //session varsa direk profile yondirme
 export async function getServerSideProbs({ req }) {
 	const session = await getSession({ req });
-	if (session) {
+	const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/users`);
+	const user = res.data?.find((user) => user.email === session?.user.email);
+	if (session && user) {
 		return {
 			redirect: {
-				destination: "/profile",
+				destination: "/profile/" + user._id,
 				permanent: false,
 			},
 		};
