@@ -62,7 +62,7 @@ const Login = () => {
 				const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/users`);
 				console.log("sonmuc " + res.data?.find((user) => user.email === session?.user?.email));
 				setCurrentUser(res.data?.find((user) => user.email === session?.user?.email));
-				push("/profile/" + currentUser?._id);
+				session && push("/profile/" + currentUser?._id);
 			} catch (error) {
 				console.log(error);
 			}
