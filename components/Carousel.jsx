@@ -25,12 +25,11 @@ const Carousel = () => {
 		customPaging: () => <div className="w-3 h-3 border bg-white rounded-full mt-10"></div>,
 	};
 
-	//Todo video 16 da kaldik
 	return (
 		<div className="h-screen w-full container mx-auto -mt-[96px]">
 			<div className="absolute top-0 left-0 w-full h-full">
 				<div className="relative h-full w-full">
-					<Image src="/images/hero-bg.jpg" alt="" layout="fill" objectFit="cover" />
+					<Image src="/images/hero-bg.jpg" alt="" fill style={{ objectFit: "cover" }} />
 				</div>
 			</div>
 			<Slider {...settings}>
