@@ -8,9 +8,11 @@ import Footer from "../../components/admin/Footer";
 import axios from "axios";
 import { useRouter } from "next/router";
 import { toast } from "react-toastify";
+import AddProduct from "../../components/admin/AddProduct";
 
 const Profile = () => {
 	const [tabs, setTabs] = useState(0);
+	const [isProductModalVisibility, setIsProductModalVisibility] = useState(false);
 	const { push } = useRouter();
 	const closeAdminAccount = async () => {
 		try {
@@ -84,6 +86,10 @@ const Profile = () => {
 			{tabs === 1 && <Order />}
 			{tabs === 2 && <Category />}
 			{tabs === 3 && <Footer />}
+			{isProductModalVisibility && <AddProduct onChangeProductModalVisibility={setIsProductModalVisibility} />}
+			<button className="btn-primary absolute w-12 h-12 !p-0 bottom-14 right-10 text-4xl" onClick={() => setIsProductModalVisibility(true)}>
+				+
+			</button>
 		</div>
 	);
 };

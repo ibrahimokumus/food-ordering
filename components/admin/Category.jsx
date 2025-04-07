@@ -11,7 +11,12 @@ const Category = () => {
 	const handleCreate = async () => {
 		try {
 			if (inputText === "" || !inputText) return;
-			const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/categories`, { title: inputText });
+			const categoryName = inputText
+				.split(" ") // Kelimelere ayırıyoruz
+				.map((word) => word.charAt(0).toUpperCase() + word.slice(1)) // Her kelimenin ilk harfini büyütüyoruz
+				.join(" "); // Tekrar birleştiriyoruz
+
+			const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/categories`, { title: categoryName });
 			setCategories([...categories, response?.data]);
 			setInputText("");
 			toast.success("Category is added");
