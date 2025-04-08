@@ -1,5 +1,11 @@
 import mongoose from "mongoose";
 
+const extraOptionSchema = new mongoose.Schema({
+	text: { type: String },
+	price: { type: Number },
+	_id: false,
+});
+
 const ProductSchema = new mongoose.Schema(
 	{
 		title: {
@@ -25,14 +31,10 @@ const ProductSchema = new mongoose.Schema(
 			required: true,
 		},
 		extraOption: {
-			type: [
-				{
-					text: { type: String },
-					price: { type: Number },
-				},
-			],
+			type: [extraOptionSchema],
 		},
 	},
-	{ timestamps: true } //olusturulma zamanlarini veritabanina ekler
+	{ timestamps: true }
 );
+
 export default mongoose.models.Product || mongoose.model("Product", ProductSchema);
