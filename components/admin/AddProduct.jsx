@@ -1,12 +1,21 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import OutsideClickHandler from "react-outside-click-handler";
 import Title from "../ui/Title";
 import { GiCancel } from "react-icons/gi";
 import axios from "axios";
+import { toast } from "react-toastify";
 const AddProduct = ({ onChangeProductModalVisibility }) => {
 	const [file, setFile] = useState();
 	const [imageSource, setImageSource] = useState();
 	const [isDragging, setIsDragging] = useState(false);
+	const [title, setTitle] = useState("");
+	const [desc, setDesc] = useState("");
+	const [category, setCategory] = useState("");
+	const [prices, setPrices] = useState([]);
+	const [extra, setExtra] = useState("");
+	const [extraOptions, setExtraOptions] = useState([]);
+
+	const [categories, setCategories] = useState([]);
 	const handleOnChange = (event) => {
 		const reader = new FileReader();
 		reader.onload = function (onLoadEvent) {
@@ -32,10 +41,51 @@ const AddProduct = ({ onChangeProductModalVisibility }) => {
 			//console.log(file);
 
 			const response = await axios.post(`${process.env.NEXT_PUBLIC_CLOUDINARY_API_URL}`, data);
+			const { url } = response.data;
+
+			const newProduct = {
+				image: url,
+				title,
+				description: desc,
+				category: category.toLowerCase(),
+				prices,
+				extraOptions,
+			};
+			const res = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/products`, newProduct);
+
+			if (res.status === 200) {
+				onChangeProductModalVisibility(false);
+				toast.success("Product has been saved successfully");
+			}
 		} catch (err) {
 			console.log(err);
 		}
 	};
+
+	const handleExtra = () => {
+		if (extra && extra.text && extra.price) {
+			setExtraOptions((prev) => [...prev, extra]);
+		}
+	};
+	const changePrice = (e, index) => {
+		if (e.target.value) {
+			const currentPrices = prices;
+			currentPrices[index] = e.target.value;
+			setPrices(currentPrices);
+		}
+	};
+	useEffect(() => {
+		const getProducts = async () => {
+			try {
+				const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/categories`);
+				setCategories(res.data);
+			} catch (err) {
+				console.log(err);
+			}
+		};
+		getProducts();
+	}, []);
+
 	return (
 		<div className="fixed top-0 left-0 w-screen h-screen z-50 after:content-[''] after:w-screen after:h-screen after:bg-white after:absolute after:top-0 after:left-0 after:opacity-60 grid place-content-center">
 			<OutsideClickHandler onOutsideClick={() => onChangeProductModalVisibility(false)}>
@@ -81,6 +131,7 @@ const AddProduct = ({ onChangeProductModalVisibility }) => {
 								type="text"
 								placeholder="Write a title..."
 								className="border rounded-md h-8 px-1 outline-none"
+								onChange={(e) => setTitle(e.target.value)}
 							/>
 						</div>
 						<div className="flex flex-col text-sm mt-4">
@@ -88,16 +139,25 @@ const AddProduct = ({ onChangeProductModalVisibility }) => {
 							<textarea
 								placeholder="Write a description..."
 								className="border rounded-md h-8 p-1 outline-none"
+								onChange={(e) => setDesc(e.target.value)}
 							/>
 						</div>
 						<div className="flex flex-col text-sm mt-4">
 							<b>Choose Category</b>
-							<select placeholder="Select a category" className="border rounded-md h-8">
-								<option value="">Select a category</option>
-								<option value="2">dasdsdsd</option>
-								<option value="3">daa2sd</option>
-								<option value="4">da34e24sd</option>
-								<option value="5">das4grd</option>
+							<select
+								placeholder="Select a category"
+								className="border rounded-md h-8"
+								onChange={(e) => setCategory(e.target.value)}
+							>
+								{categories.length > 0 &&
+									categories.map((category) => (
+										<option
+											value={category.title.toLowerCase()}
+											key={category._id}
+										>
+											{category.title}
+										</option>
+									))}
 							</select>
 						</div>
 						<div className="flex flex-col text-sm mt-4">
@@ -107,16 +167,22 @@ const AddProduct = ({ onChangeProductModalVisibility }) => {
 									type="number"
 									className="border-b-2 p-1 pl-0 text-sm outline-none"
 									placeholder="Small"
+									onChange={(e) => {
+										changePrice(e, 0);
+										console.log("giildiiii");
+									}}
 								/>
 								<input
 									type="number"
 									className="border-b-2  p-1 pl-0 text-sm outline-none"
 									placeholder="Medium"
+									onChange={(e) => changePrice(e, 1)}
 								/>
 								<input
 									type="number"
 									className="border-b-2  p-1 pl-0 text-sm outline-none"
 									placeholder="Large"
+									onChange={(e) => changePrice(e, 2)}
 								/>
 							</div>
 						</div>
@@ -124,22 +190,55 @@ const AddProduct = ({ onChangeProductModalVisibility }) => {
 							<b>Extra</b>
 							<div className="flex gap-4 w-full md:flex-nowrap flex-wrap">
 								<input
-									type="number"
+									type="text"
 									className="border-b-2 p-1 pl-0 text-sm outline-none w-36"
 									placeholder="Item"
+									name="text"
+									onChange={(e) =>
+										setExtra({
+											...extra,
+											[e.target.name]: e.target.value,
+										})
+									}
 								/>
 								<input
 									type="number"
 									className="border-b-2 p-1 pl-0 text-sm outline-none w-36"
 									placeholder="price"
+									name="price"
+									onChange={(e) =>
+										setExtra({
+											...extra,
+											[e.target.name]: e.target.value,
+										})
+									}
 								/>
-								<button className="btn-primary ml-auto">Add</button>
+								<button className="btn-primary ml-auto" onClick={() => handleExtra()}>
+									Add
+								</button>
 							</div>
 
-							<div className="mt-2">
-								<span className="inline-block border border-orange-500 p-1 rounded-xl text-xs text-orange-500">
-									mayonez
-								</span>
+							<div className="mt-2 flex gap-2">
+								{extraOptions.map((item, index) => (
+									<span
+										className="inline-block border border-orange-500 text-orange-500 p-1 rounded-xl text-xs cursor-pointer"
+										key={index}
+										onClick={() => {
+											setExtraOptions(
+												extraOptions.filter(
+													(
+														_,
+														i
+													) =>
+														i !==
+														index
+												)
+											);
+										}}
+									>
+										{item.text}
+									</span>
+								))}
 							</div>
 						</div>
 						<div className="flex justify-end">
