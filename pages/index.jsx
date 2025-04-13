@@ -1,19 +1,17 @@
 import axios from "axios";
 import Home from "./home";
-//import styles from "../styles/globals.css";
-export default function Index({ categoryList }) {
-	return (
-		<>
-			<Home categoryList={categoryList} />
-		</>
-	);
+
+export default function Index({ categoryList, productList }) {
+	return <Home categoryList={categoryList} productList={productList} />;
 }
 
 export const getServerSideProps = async () => {
-	const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/categories`);
+	const categories = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/categories`);
+	const products = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/products`);
 	return {
 		props: {
-			categoryList: response.data ? response.data : [],
+			categoryList: categories.data ? categories.data : [],
+			productList: products.data ? products.data : [],
 		},
 	};
 };

@@ -3,7 +3,6 @@ import mongoose from "mongoose";
 const extraOptionSchema = new mongoose.Schema({
 	text: { type: String },
 	price: { type: Number },
-	_id: false,
 });
 
 const ProductSchema = new mongoose.Schema(
@@ -30,7 +29,7 @@ const ProductSchema = new mongoose.Schema(
 			type: String,
 			required: true,
 		},
-		extraOption: {
+		extraOptions: {
 			type: [extraOptionSchema],
 		},
 	},

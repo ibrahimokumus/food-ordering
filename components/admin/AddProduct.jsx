@@ -37,20 +37,27 @@ const AddProduct = ({ onChangeProductModalVisibility }) => {
 		data.append("file", file);
 		data.append("upload_preset", "food-ordering");
 		try {
-			//	console.log(data);
+			console.log(extraOptions);
+
 			//console.log(file);
 
-			const response = await axios.post(`${process.env.NEXT_PUBLIC_CLOUDINARY_API_URL}`, data);
-			const { url } = response.data;
-
+			//	const response = await axios.post(`${process.env.NEXT_PUBLIC_CLOUDINARY_API_URL}`, data);
+			//	const { url } = response.data;
+			// if (response?.status !== 200) {
+			// 	onChangeProductModalVisibility(false);
+			// 	toast.error("Product image has not been uploaded");
+			// 	return;
+			// }
 			const newProduct = {
-				image: url,
+				image: "image will be added later" || url,
 				title,
 				description: desc,
 				category: category.toLowerCase(),
 				prices,
 				extraOptions,
 			};
+			console.log(newProduct);
+
 			const res = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/products`, newProduct);
 
 			if (res.status === 200) {
@@ -148,6 +155,7 @@ const AddProduct = ({ onChangeProductModalVisibility }) => {
 								placeholder="Select a category"
 								className="border rounded-md h-8"
 								onChange={(e) => setCategory(e.target.value)}
+								value={category || ""}
 							>
 								{categories.length > 0 &&
 									categories.map((category) => (
@@ -169,7 +177,6 @@ const AddProduct = ({ onChangeProductModalVisibility }) => {
 									placeholder="Small"
 									onChange={(e) => {
 										changePrice(e, 0);
-										console.log("giildiiii");
 									}}
 								/>
 								<input
@@ -200,6 +207,7 @@ const AddProduct = ({ onChangeProductModalVisibility }) => {
 											[e.target.name]: e.target.value,
 										})
 									}
+									value={extra.text}
 								/>
 								<input
 									type="number"
@@ -209,16 +217,19 @@ const AddProduct = ({ onChangeProductModalVisibility }) => {
 									onChange={(e) =>
 										setExtra({
 											...extra,
-											[e.target.name]: e.target.value,
+											[e.target.name]: Number(
+												e.target.value
+											),
 										})
 									}
+									value={extra.price}
 								/>
 								<button className="btn-primary ml-auto" onClick={() => handleExtra()}>
 									Add
 								</button>
 							</div>
 
-							<div className="mt-2 flex gap-2">
+							<div className="mt-2 flex flex-wrap gap-2">
 								{extraOptions.map((item, index) => (
 									<span
 										className="inline-block border border-orange-500 text-orange-500 p-1 rounded-xl text-xs cursor-pointer"
