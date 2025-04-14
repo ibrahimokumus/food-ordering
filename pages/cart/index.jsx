@@ -5,6 +5,7 @@ import { resetProduct } from "../../redux/cartSlice";
 const Cart = () => {
 	const cart = useSelector((state) => state.cart);
 	const dispatch = useDispatch();
+
 	return (
 		<div className="min-h-[calc(100vh_-_433px)]">
 			<div className="flex justify-between items-center md:flex-row flex-col">
@@ -40,11 +41,12 @@ const Cart = () => {
 											height={50}
 										/>
 										<span>{product.name}</span>
+										<span>{console.log(product)}</span>
 									</td>
 									<td className="py-4 px-6 font-medium whitespace-nowrap hover:text-white">
-										{product.extras.map((item) => (
-											<span key={item.id}>
-												{item.name},{" "}
+										{product.extras.map((item, index) => (
+											<span key={index}>
+												{item.text},
 											</span>
 										))}
 									</td>
