@@ -86,10 +86,12 @@ const Profile = () => {
 			{tabs === 1 && <Order />}
 			{tabs === 2 && <Category />}
 			{tabs === 3 && <Footer />}
-			{isProductModalVisibility && <AddProduct onChangeProductModalVisibility={setIsProductModalVisibility} />}
-			<button className="btn-primary absolute w-12 h-12 !p-0 bottom-14 right-10 text-4xl" onClick={() => setIsProductModalVisibility(true)}>
-				+
-			</button>
+			{tabs === 0 && isProductModalVisibility && <AddProduct onChangeProductModalVisibility={setIsProductModalVisibility} />}
+			{tabs === 0 && (
+				<button className="btn-primary absolute w-12 h-12 !p-0 bottom-14 right-10 text-4xl" onClick={() => setIsProductModalVisibility(true)}>
+					+
+				</button>
+			)}
 		</div>
 	);
 };

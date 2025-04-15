@@ -14,7 +14,7 @@ body {
 	font-family: "Open Sans", sans-serif;
 }
 .btn-primary {
-	@apply text-white px-8 py-2 rounded-3xl bg-primary cursor-pointer hover:opacity-50 transition-all;
+	@apply text-white px-8 py-2 rounded-3xl bg-primary cursor-pointer hover:opacity-60 transition-all disabled:opacity-50 disabled:cursor-not-allowed;
 }
 
 .slick-dots {

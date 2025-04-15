@@ -15,7 +15,7 @@ const Register = () => {
 
 			if (response.status === 200) {
 				toast.success("User created");
-				push("/profile");
+				push(`/profile/${response.data._id}`);
 			}
 		} catch (error) {
 			toast.error(error.response.data.message);

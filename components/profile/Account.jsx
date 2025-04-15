@@ -89,7 +89,7 @@ const Account = ({ user }) => {
 			<Title addClass="text-[40px]">Account Settings</Title>
 			<div className="grid lg:grid-cols-2 grid-cols-1 gap-4 mt-4">
 				{inputs.map((input) => (
-					<Input key="input.id" {...input} onBlur={handleBlur} onChange={handleChange} />
+					<Input key={input.id} {...input} onBlur={handleBlur} onChange={handleChange} />
 				))}
 			</div>
 			<button className="btn-primary mt-4" type="submit">

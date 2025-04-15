@@ -2,10 +2,44 @@ import Image from "next/image";
 import Title from "../../components/ui/Title";
 import { useDispatch, useSelector } from "react-redux";
 import { resetProduct } from "../../redux/cartSlice";
-const Cart = () => {
+import axios from "axios";
+import { useSession } from "next-auth/react";
+import { toast } from "react-toastify";
+import { useRouter } from "next/router";
+
+const Cart = ({ userList }) => {
 	const cart = useSelector((state) => state.cart);
 	const dispatch = useDispatch();
+	const { data: session } = useSession();
+	const user = userList?.find((user) => user.email === session?.user?.email);
+	const router = useRouter();
+	const newOrder = {
+		customer: user?.fullName,
+		address: user?.address ? user?.address : "No Address",
+		total: cart.total,
+		paymentMethod: 0,
+		status: 1,
+	};
 
+	const createOrder = async () => {
+		try {
+			if (session && confirm("Are you sure to create an order?")) {
+				const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/orders`, newOrder);
+				if (response.status === 201) {
+					dispatch(resetProduct());
+					toast.success("Order created successfully");
+					router.push(`/order/${response.data._id}`);
+				} else {
+					toast.error("Something  happen wrong");
+				}
+			} else {
+				toast.error("Please login");
+			}
+		} catch (error) {
+			session ? toast.error("Something happen wrong") : toast.error("Please login");
+			console.log(error);
+		}
+	};
 	return (
 		<div className="min-h-[calc(100vh_-_433px)]">
 			<div className="flex justify-between items-center md:flex-row flex-col">
@@ -72,7 +106,7 @@ const Cart = () => {
 
 					<div>
 						{/* state sifirlamak icin kullaniliyor. bunu ilerde duzenleyebiliriz*/}
-						<button className="btn-primary mt-4 md:w-auto w-52" onClick={() => dispatch(resetProduct())}>
+						<button className="btn-primary mt-4 md:w-auto w-52" onClick={() => createOrder()}>
 							CHECKOUT NOW!
 						</button>
 					</div>
@@ -80,6 +114,16 @@ const Cart = () => {
 			</div>
 		</div>
 	);
+};
+
+export const getServerSideProps = async () => {
+	const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/users`);
+
+	return {
+		props: {
+			userList: response.data ? response.data : [],
+		},
+	};
 };
 
 export default Cart;
