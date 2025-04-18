@@ -14,6 +14,8 @@ const Index = ({ food }) => {
 	const cart = useSelector((state) => state.cart);
 
 	const dispatch = useDispatch();
+
+	const findCart = cart.products.find((item) => item._id === food._id);
 	const handleSize = (sizeIndex) => {
 		const difference = prices[sizeIndex] - prices[size];
 		setSize(sizeIndex);
@@ -56,27 +58,15 @@ const Index = ({ food }) => {
 							<div className="flex items-center gap-x-20 md:justify-start justify-center">
 								<div className="relative w-8 h-8 cursor-pointer" onClick={() => handleSize(0)}>
 									<Image src="/images/size.png" alt="" layout="fill" />
-									<span className="absolute top-0 -right-6 text-xs bg-primary rounded-full px-[5px] font-medium">
-										Small
-									</span>
+									<span className="absolute top-0 -right-6 text-xs bg-primary rounded-full px-[5px] font-medium">Small</span>
 								</div>
-								<div
-									className="relative w-12 h-12 cursor-pointer"
-									onClick={() => handleSize(1)}
-								>
+								<div className="relative w-12 h-12 cursor-pointer" onClick={() => handleSize(1)}>
 									<Image src="/images/size.png" alt="" layout="fill" />
-									<span className="absolute top-0 -right-6 text-xs bg-primary rounded-full px-[5px] font-medium">
-										Medium
-									</span>
+									<span className="absolute top-0 -right-6 text-xs bg-primary rounded-full px-[5px] font-medium">Medium</span>
 								</div>
-								<div
-									className="relative w-16 h-16 cursor-pointer"
-									onClick={() => handleSize(2)}
-								>
+								<div className="relative w-16 h-16 cursor-pointer" onClick={() => handleSize(2)}>
 									<Image src="/images/size.png" alt="" layout="fill" />
-									<span className="absolute top-0 -right-6 text-xs bg-primary rounded-full px-[5px] font-medium">
-										Large
-									</span>
+									<span className="absolute top-0 -right-6 text-xs bg-primary rounded-full px-[5px] font-medium">Large</span>
 								</div>
 							</div>
 						</>
@@ -85,16 +75,12 @@ const Index = ({ food }) => {
 				<div className="flex gap-x-4 my-6 md:justify-start justify-center">
 					{extraItems.map((item) => (
 						<label className="flex items-center gap-x-1" key={item._id}>
-							<input
-								type="checkbox"
-								className="w-5 h-5 accent-primary"
-								onChange={(e) => handleChange(e, item)}
-							/>
+							<input type="checkbox" className="w-5 h-5 accent-primary" onChange={(e) => handleChange(e, item)} />
 							<span className="text-sm font-semibold">{item.text}</span>
 						</label>
 					))}
 				</div>
-				<button className="btn-primary" onClick={handleClick}>
+				<button className="btn-primary" onClick={handleClick} disabled={findCart}>
 					Add to Cart
 				</button>
 			</div>

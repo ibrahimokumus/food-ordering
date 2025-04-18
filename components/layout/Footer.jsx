@@ -47,7 +47,7 @@ const Footer = () => {
 										key={media._id}
 										href={media?.link}
 										target="_blank"
-										className="w-8 h-8 grid place-content-center bg-white text-secondary rounded-full hover:text-primary"
+										className="w-8 h-8 grid place-content-center bg-white text-secondary rounded-full hover:text-white hover:bg-primary transition-all"
 									>
 										<i className={media?.icon}></i>
 									</a>
