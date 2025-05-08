@@ -8,7 +8,6 @@ const MenuWrapper = ({ categoryList, productList }) => {
 	const [productLimit, setProductLimit] = useState(3);
 	useEffect(() => {
 		setFilter(productList?.filter((product) => product.category === categoryList[activeIndex]?.title?.toLowerCase()));
-
 		setProductLimit(3);
 	}, [categoryList, productList, activeIndex]);
 
