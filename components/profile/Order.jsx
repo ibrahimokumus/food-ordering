@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Title from "../ui/Title";
 import { useSession } from "next-auth/react";
 import axios from "axios";
@@ -62,18 +62,10 @@ const Order = () => {
 								<td className="py-4 px-6 font-medium whitespace-nowrap hover:text-white flex items-center gap-x-1 justify-center">
 									<span>{order?._id.substring(0, 5)}...</span>
 								</td>
-								<td className="py-4 px-6 font-medium whitespace-nowrap hover:text-white">
-									Adana
-								</td>
-								<td className="py-4 px-6 font-medium whitespace-nowrap hover:text-white">
-									01-09-2022
-								</td>
-								<td className="py-4 px-6 font-medium whitespace-nowrap hover:text-white">
-									$18
-								</td>
-								<td className="py-4 px-6 font-medium whitespace-nowrap hover:text-white">
-									preparing
-								</td>
+								<td className="py-4 px-6 font-medium whitespace-nowrap hover:text-white">Adana</td>
+								<td className="py-4 px-6 font-medium whitespace-nowrap hover:text-white">01-09-2022</td>
+								<td className="py-4 px-6 font-medium whitespace-nowrap hover:text-white">$18</td>
+								<td className="py-4 px-6 font-medium whitespace-nowrap hover:text-white">preparing</td>
 							</tr>
 						))}
 					</tbody>

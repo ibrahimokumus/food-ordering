@@ -31,7 +31,7 @@ const MenuWrapper = ({ categoryList, productList }) => {
 
 			{filter?.length > 0 && (
 				<div className="flex justify-center mt-8">
-					<button className="btn-primary" onClick={() => setProductLimit(productLimit + 3)}>
+					<button className={`btn-primary ${filter?.length <= productLimit && "hidden"}`} onClick={() => setProductLimit(productLimit + 3)}>
 						View more
 					</button>
 				</div>

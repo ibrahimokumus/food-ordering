@@ -22,7 +22,7 @@ const Profile = ({ user }) => {
 			push("/auth/login");
 		}
 	}, [session]);
-	console.log(user._id);
+
 	return (
 		<div className="flex px-10 min-h-[calc(100vh_-_433px)]">
 			<div className="w-80">
@@ -31,39 +31,19 @@ const Profile = ({ user }) => {
 					<b className="text-2xl mt-1">{user.fullName}</b>
 				</div>
 				<ul className="text-center font-semibold">
-					<li
-						onClick={() => setTabs(0)}
-						className={`border w-full p-3 cursor-pointer hover:bg-primary hover:text-white transition-all ${
-							tabs === 0 && "bg-primary"
-						}`}
-					>
+					<li onClick={() => setTabs(0)} className={`border w-full p-3 cursor-pointer hover:bg-primary hover:text-white transition-all ${tabs === 0 && "bg-primary"}`}>
 						<i className="fa fa-home"></i>
 						<button className="ml-1 ">Account</button>
 					</li>
-					<li
-						onClick={() => setTabs(1)}
-						className={`border w-full p-3 cursor-pointer hover:bg-primary hover:text-white transition-all ${
-							tabs === 1 && "bg-primary"
-						}`}
-					>
+					<li onClick={() => setTabs(1)} className={`border w-full p-3 cursor-pointer hover:bg-primary hover:text-white transition-all ${tabs === 1 && "bg-primary"}`}>
 						<i className="fa fa-key"></i>
 						<button className="ml-1">Password</button>
 					</li>
-					<li
-						onClick={() => setTabs(2)}
-						className={`border w-full p-3 cursor-pointer hover:bg-primary hover:text-white transition-all ${
-							tabs === 2 && "bg-primary"
-						}`}
-					>
+					<li onClick={() => setTabs(2)} className={`border w-full p-3 cursor-pointer hover:bg-primary hover:text-white transition-all ${tabs === 2 && "bg-primary"}`}>
 						<i className="fa fa-motorcycle"></i>
 						<button className="ml-1">Orders</button>
 					</li>
-					<li
-						onClick={handleSignOut}
-						className={`border w-full p-3 cursor-pointer hover:bg-primary hover:text-white transition-all ${
-							tabs === 3 && "bg-primary"
-						}`}
-					>
+					<li onClick={handleSignOut} className={`border w-full p-3 cursor-pointer hover:bg-primary hover:text-white transition-all ${tabs === 3 && "bg-primary"}`}>
 						<i className="fa fa-sign-out"></i>
 						<button className="ml-1">Exit</button>
 					</li>

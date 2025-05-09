@@ -7,24 +7,27 @@ import Link from "next/link";
 import { useSession, signIn, getSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import axios from "axios";
+import { toast } from "react-toastify";
 const Login = () => {
 	const { data: session } = useSession();
 	const { push } = useRouter();
 	const [currentUser, setCurrentUser] = useState(null);
-	console.log(session);
+	//console.log(session);
 	const onSubmit = async (values, actions) => {
 		const { email, password } = values;
 		let options = { redirect: false, email, password };
 		try {
 			const res = await signIn("credentials", options);
-			actions.resetForm();
+			console.log(res);
+			if (res.status !== 200) {
+				toast.error("email or password is wrong");
+			} else {
+				toast.success("Login is successfull");
+				actions.resetForm();
+			}
 		} catch (error) {
 			console.log(error);
 		}
-
-		//	push("/profile");
-		//* giris bilgisi yanlissa, hata basilabilir burda.
-		//*toastfy ile uyari bas.
 	};
 	const { values, errors, touched, handleSubmit, handleChange, handleBlur } = useFormik({
 		initialValues: {
@@ -60,7 +63,7 @@ const Login = () => {
 		const getUser = async () => {
 			try {
 				const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/users`);
-				console.log("sonmuc " + res.data?.find((user) => user.email === session?.user?.email));
+
 				setCurrentUser(res.data?.find((user) => user.email === session?.user?.email));
 				session && push("/profile/" + currentUser?._id);
 			} catch (error) {

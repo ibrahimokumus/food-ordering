@@ -22,7 +22,6 @@ const Register = () => {
 			console.log(error);
 		}
 
-		console.log("first");
 		await new Promise((resolve) => setTimeout(resolve, 4000));
 		actions.resetForm();
 	};

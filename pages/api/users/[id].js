@@ -11,7 +11,6 @@ const handle = async (req, res) => {
 		try {
 			const user = await User.findById(id);
 
-			console.log(user);
 			res.status(200).json(user);
 		} catch (err) {
 			console.log(err);
@@ -27,7 +26,6 @@ const handle = async (req, res) => {
 				new: true,
 			});
 
-			console.log(users);
 			res.status(200).json(users);
 		} catch (err) {
 			console.log(err);

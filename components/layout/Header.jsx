@@ -63,7 +63,7 @@ const Header = () => {
 					<button onClick={() => setIsSearchModal(true)}>
 						<FaSearch className="hover:text-primary transition-all" />
 					</button>
-					<Link href="#" className="md:inline-block hidden">
+					<Link href="menu" className="md:inline-block hidden">
 						<button className="btn-primary">Order Online</button>
 					</Link>
 					<button

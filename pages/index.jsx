@@ -9,7 +9,7 @@ export const getServerSideProps = async () => {
 	try {
 		const categories = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/categories`);
 		const products = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/products`);
-		console.log(categories);
+		//console.log(categories);
 		return {
 			props: {
 				categoryList: categories?.data ? categories.data : [],

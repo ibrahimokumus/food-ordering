@@ -37,26 +37,22 @@ const AddProduct = ({ onChangeProductModalVisibility }) => {
 		data.append("file", file);
 		data.append("upload_preset", "food-ordering");
 		try {
-			console.log(extraOptions);
-
-			//console.log(file);
-
-			//	const response = await axios.post(`${process.env.NEXT_PUBLIC_CLOUDINARY_API_URL}`, data);
-			//	const { url } = response.data;
-			// if (response?.status !== 200) {
-			// 	onChangeProductModalVisibility(false);
-			// 	toast.error("Product image has not been uploaded");
-			// 	return;
-			// }
+			const response = await axios.post(`${process.env.NEXT_PUBLIC_CLOUDINARY_API_URL}`, data);
+			const { url } = response.data;
+			if (response?.status !== 200) {
+				onChangeProductModalVisibility(false);
+				toast.error("Product image has not been uploaded");
+				return;
+			}
 			const newProduct = {
-				image: "image will be added later" || url,
+				image: url || "image will be added later",
 				title,
 				description: desc,
 				category: category.toLowerCase(),
 				prices,
 				extraOptions,
 			};
-			console.log(newProduct);
+			//	console.log(newProduct);
 
 			const res = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/products`, newProduct);
 
@@ -82,7 +78,7 @@ const AddProduct = ({ onChangeProductModalVisibility }) => {
 		}
 	};
 	useEffect(() => {
-		const getProducts = async () => {
+		const getCategories = async () => {
 			try {
 				const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/categories`);
 				setCategories(res.data);
@@ -90,7 +86,7 @@ const AddProduct = ({ onChangeProductModalVisibility }) => {
 				console.log(err);
 			}
 		};
-		getProducts();
+		getCategories();
 	}, []);
 
 	return (
@@ -103,9 +99,7 @@ const AddProduct = ({ onChangeProductModalVisibility }) => {
 							<GiCancel size={30} className="hover:text-primary" />
 						</button>
 						<div
-							className={`flex flex-col text-sm mt-4 border-2 border-dashed p-4 rounded-md transition-colors duration-300 ${
-								isDragging ? "border-blue-500 bg-blue-50" : "border-gray-300"
-							}`}
+							className={`flex flex-col text-sm mt-4 border-2 border-dashed p-4 rounded-md transition-colors duration-300 ${isDragging ? "border-blue-500 bg-blue-50" : "border-gray-300"}`}
 							onDrop={handleDrop}
 							onDragOver={(e) => {
 								e.preventDefault();
@@ -114,55 +108,25 @@ const AddProduct = ({ onChangeProductModalVisibility }) => {
 							onDragLeave={() => setIsDragging(false)}
 						>
 							<label className="flex gap-2 items-center cursor-pointer">
-								<input
-									type="file"
-									accept=".jpeg, .jpg, .png"
-									onChange={(e) => handleOnChange(e)}
-									className="hidden"
-								/>
-								<button className="btn-primary !bg-blue-600 pointer-events-none">
-									Choose an Image
-								</button>
-								{imageSource && (
-									<img
-										src={imageSource}
-										alt=""
-										className="w-12 h-12 rounded-full"
-									/>
-								)}
+								<input type="file" accept=".jpeg, .jpg, .png" onChange={(e) => handleOnChange(e)} className="hidden" />
+								<button className="btn-primary !bg-blue-600 pointer-events-none">Choose an Image</button>
+								{imageSource && <img src={imageSource} alt="" className="w-12 h-12 rounded-full" />}
 							</label>
 						</div>
 						<div className="flex flex-col text-sm mt-4">
 							<b>Title</b>
-							<input
-								type="text"
-								placeholder="Write a title..."
-								className="border rounded-md h-8 px-1 outline-none"
-								onChange={(e) => setTitle(e.target.value)}
-							/>
+							<input type="text" placeholder="Write a title..." className="border rounded-md h-8 px-1 outline-none" onChange={(e) => setTitle(e.target.value)} />
 						</div>
 						<div className="flex flex-col text-sm mt-4">
 							<b>Desc</b>
-							<textarea
-								placeholder="Write a description..."
-								className="border rounded-md h-8 p-1 outline-none"
-								onChange={(e) => setDesc(e.target.value)}
-							/>
+							<textarea placeholder="Write a description..." className="border rounded-md h-8 p-1 outline-none" onChange={(e) => setDesc(e.target.value)} />
 						</div>
 						<div className="flex flex-col text-sm mt-4">
 							<b>Choose Category</b>
-							<select
-								placeholder="Select a category"
-								className="border rounded-md h-8"
-								onChange={(e) => setCategory(e.target.value)}
-								value={category || ""}
-							>
+							<select placeholder="Select a category" className="border rounded-md h-8" onChange={(e) => setCategory(e.target.value)} value={category || ""}>
 								{categories.length > 0 &&
 									categories.map((category) => (
-										<option
-											value={category.title.toLowerCase()}
-											key={category._id}
-										>
+										<option value={category.title.toLowerCase()} key={category._id}>
 											{category.title}
 										</option>
 									))}
@@ -179,18 +143,8 @@ const AddProduct = ({ onChangeProductModalVisibility }) => {
 										changePrice(e, 0);
 									}}
 								/>
-								<input
-									type="number"
-									className="border-b-2  p-1 pl-0 text-sm outline-none"
-									placeholder="Medium"
-									onChange={(e) => changePrice(e, 1)}
-								/>
-								<input
-									type="number"
-									className="border-b-2  p-1 pl-0 text-sm outline-none"
-									placeholder="Large"
-									onChange={(e) => changePrice(e, 2)}
-								/>
+								<input type="number" className="border-b-2  p-1 pl-0 text-sm outline-none" placeholder="Medium" onChange={(e) => changePrice(e, 1)} />
+								<input type="number" className="border-b-2  p-1 pl-0 text-sm outline-none" placeholder="Large" onChange={(e) => changePrice(e, 2)} />
 							</div>
 						</div>
 						<div className="flex flex-col text-sm mt-4">
@@ -217,9 +171,7 @@ const AddProduct = ({ onChangeProductModalVisibility }) => {
 									onChange={(e) =>
 										setExtra({
 											...extra,
-											[e.target.name]: Number(
-												e.target.value
-											),
+											[e.target.name]: Number(e.target.value),
 										})
 									}
 									value={extra.price}
@@ -235,16 +187,7 @@ const AddProduct = ({ onChangeProductModalVisibility }) => {
 										className="inline-block border border-orange-500 text-orange-500 p-1 rounded-xl text-xs cursor-pointer"
 										key={index}
 										onClick={() => {
-											setExtraOptions(
-												extraOptions.filter(
-													(
-														_,
-														i
-													) =>
-														i !==
-														index
-												)
-											);
+											setExtraOptions(extraOptions.filter((_, i) => i !== index));
 										}}
 									>
 										{item.text}
