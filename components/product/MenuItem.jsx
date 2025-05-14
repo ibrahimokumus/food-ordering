@@ -35,11 +35,7 @@ const MenuItem = ({ product }) => {
 				<p className="text-[15px]">{product.description}</p>
 				<div className="flex justify-between items-center mt-4">
 					<span>${product.prices[0]}</span>
-					<button
-						className="btn-primary w-10 h-10 !rounded-full !p-0 grid place-content-center"
-						disabled={findCart}
-						onClick={handleClick}
-					>
+					<button className="btn-primary w-10 h-10 !rounded-full !p-0 grid place-content-center" disabled={findCart} onClick={handleClick} title="Add to cart">
 						<RiShoppingCart2Fill />
 					</button>
 				</div>

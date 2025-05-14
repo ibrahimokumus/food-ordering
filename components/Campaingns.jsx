@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { MdShoppingCart } from "react-icons/md";
 import Title from "./ui/Title";
+import Link from "next/link";
 const CampaingnItem = () => {
 	return (
 		<div className="bg-secondary flex-1 rounded-md py-5 px-[15px] flex items-center gap-x-4">
@@ -13,9 +14,11 @@ const CampaingnItem = () => {
 					<span className="text-[40px]">20%</span>
 					<span className="text-sm inline-block ml-1">Off</span>
 				</div>
-				<button className="btn-primary flex items-center gap-x-2">
-					Order Now <MdShoppingCart size={20} />
-				</button>
+				<Link href={"/menu"}>
+					<button className="btn-primary flex items-center gap-x-2">
+						Order Now <MdShoppingCart size={20} />
+					</button>
+				</Link>
 			</div>
 		</div>
 	);
