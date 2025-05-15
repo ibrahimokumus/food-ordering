@@ -5,7 +5,7 @@ const Lottie = dynamic(() => import("lottie-react"), { ssr: false });
 
 const NotFound = () => {
 	return (
-		<div className="w-full h-screen overflow-hidden">
+		<div className="w-full h-[40vw]">
 			<div className="w-[40vw] h-full mx-auto">
 				<Lottie animationData={animationData} loop={true} />
 			</div>

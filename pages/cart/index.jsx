@@ -18,7 +18,7 @@ const Cart = ({ userList }) => {
 		address: user?.address ? user?.address : "No Address",
 		total: cart.total,
 		paymentMethod: 0,
-		status: 1,
+		status: 0,
 	};
 
 	const createOrder = async () => {
@@ -89,7 +89,7 @@ const Cart = ({ userList }) => {
 
 					<div className="mt-6">
 						<b>Subtotal: </b>${cart.total} <br />
-						<b className=" inline-block my-1">Discount: </b>
+						<b className="inline-block my-1">Discount: </b>
 						$0.00 <br />
 						<b>Total: </b>${cart.total}
 					</div>
